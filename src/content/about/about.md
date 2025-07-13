@@ -7,10 +7,7 @@ This content will be displayed at the top of the index page.
 You can leave this empty if you don’t want to show any content.
 -->
 
-A static blog theme based on [Astro](https://astro.build), designed for clarity and focus.
+houdy! i am Adelin and this is my personal website! :3
 
-The layout is intentionally minimal, letting your content take center stage without distraction. Built with flexibility in mind, the theme offers some freedom to customize while preserving its clean aesthetic.
-
-Effortlessly share your thoughts in _a calm & dustless space._
-
-Check posts below for details and view source on [GitHub](https://github.com/the3ash/astro-chiri).
+here i post most of my projects and adventures!
+if you want to contact me you can email me at adelinmihai071@gmail.com or just dm me on instagram at [@xnd.adelin](https://instagram.com/xnd.adelin).
