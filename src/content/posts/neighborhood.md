@@ -20,7 +20,7 @@ so, yeah, i worked ~100h on this project! i had worked on a similar project befo
 ## my journey
 because i am romanian, i needed a visa! it took 2 weeks from when i completed my ds160 form and actually getting my passport with the visa back. the process went smoothly. now i have a 10 year tourist visa to go to the US!
 
-i arrived in san francisco on the 16th of july. i passed through customs in dublin, so i went directly to get the bart to mission, the district where my house is. the first smell i felt when i was leaving the 24th street mission bart station was poop. yeah, this district smells a lot of poop! in the financial district it's a bit better. 
+i arrived in san francisco on the 16th of june. i passed through customs in dublin, so i went directly to get the bart to mission, the district where my house is. the first smell i felt when i was leaving the 24th street mission bart station was poop. yeah, this district smells a lot of poop! in the financial district it's a bit better. 
 
 i met with my romanian friends, cosmin & simone, and they led me to atelier (the mission house). they showed me the house, the district a little bit and went to golden gate with everyone else! the ggb is really big! i had a lot of fun with them! we went to pier 39, fisherman's wharf, saw the 4th of july fireworks, the dolores park, the painted ladies & a lot more!
 
