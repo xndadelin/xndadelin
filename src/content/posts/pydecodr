@@ -1,3 +1,8 @@
+---
+title: 'pydecodr'
+pubDate: '2025-10-31'
+---
+
 # pydecodr
 > A modular CTF/crypto library toolkit for encodings, classic ciphers, and autodetection. CLI included :3.
 
