@@ -62,7 +62,7 @@ mod = load_module("adfgx")
 ciphertext = mod.encrypt("DEFEND THE EAST WALL", "FORTIFICATION", "CIPHER")
 print(mod.decrypt(ciphertext, "FORTIFICATION", "CIPHER"))
 ```
-# decodr CLI & code usage reference
+# pydecodr CLI & code usage reference
 
 This document shows how to use each cipher and module from the command line and from Python code.
 
@@ -75,15 +75,15 @@ This document shows how to use each cipher and module from the command line and 
 CLI:
 
 ```
-python3 -m decodr.ciphers.classical.affine encrypt <text> [a] [b]
-python3 -m decodr.ciphers.classical.affine decrypt <text> [a] [b]
-python3 -m decodr.ciphers.classical.affine crack <ciphertext>
+python3 -m pydecodr.ciphers.classical.affine encrypt <text> [a] [b]
+python3 -m pydecodr.ciphers.classical.affine decrypt <text> [a] [b]
+python3 -m pydecodr.ciphers.classical.affine crack <ciphertext>
 ```
 
 Python:
 
 ```python
-from decodr.ciphers.classical.affine import encrypt, decrypt, crack
+from pydecodr.ciphers.classical.affine import encrypt, decrypt, crack
 cipher = encrypt("HELLO", a=5, b=8)
 plain = decrypt(cipher, a=5, b=8)
 guesses = crack(cipher)
@@ -96,13 +96,13 @@ guesses = crack(cipher)
 CLI:
 
 ```
-python3 -m decodr.ciphers.classical.atbash <encode|decode> <text>
+python3 -m pydecodr.ciphers.classical.atbash <encode|decode> <text>
 ```
 
 Python:
 
 ```python
-from decodr.ciphers.classical.atbash import encode, decode
+from pydecodr.ciphers.classical.atbash import encode, decode
 cipher = encode("HELLO")
 plain = decode(cipher)
 ```
@@ -114,15 +114,15 @@ plain = decode(cipher)
 CLI:
 
 ```
-python3 -m decodr.ciphers.classical.caesar encrypt <text> [shift]
-python3 -m decodr.ciphers.classical.caesar decrypt <text> [shift]
-python3 -m decodr.ciphers.classical.caesar crack <text>
+python3 -m pydecodr.ciphers.classical.caesar encrypt <text> [shift]
+python3 -m pydecodr.ciphers.classical.caesar decrypt <text> [shift]
+python3 -m pydecodr.ciphers.classical.caesar crack <text>
 ```
 
 Python:
 
 ```python
-from decodr.ciphers.classical.caesar import encrypt, decrypt, crack
+from pydecodr.ciphers.classical.caesar import encrypt, decrypt, crack
 cipher = encrypt("HELLO", shift=3)
 plain = decrypt(cipher, shift=3)
 possible = crack(cipher)
@@ -135,13 +135,13 @@ possible = crack(cipher)
 CLI:
 
 ```
-python3 -m decodr.ciphers.classical.rot13 <encode|decode> <text>
+python3 -m pydecodr.ciphers.classical.rot13 <encode|decode> <text>
 ```
 
 Python:
 
 ```python
-from decodr.ciphers.classical.rot13 import encode, decode
+from pydecodr.ciphers.classical.rot13 import encode, decode
 cipher = encode("HELLO")
 plain = decode(cipher)
 ```
@@ -153,15 +153,15 @@ plain = decode(cipher)
 CLI:
 
 ```
-python3 -m decodr.ciphers.classical.substitution generate-key
-python3 -m decodr.ciphers.classical.substitution encrypt <text> <key>
-python3 -m decodr.ciphers.classical.substitution decrypt <text> <key>
+python3 -m pydecodr.ciphers.classical.substitution generate-key
+python3 -m pydecodr.ciphers.classical.substitution encrypt <text> <key>
+python3 -m pydecodr.ciphers.classical.substitution decrypt <text> <key>
 ```
 
 Python:
 
 ```python
-from decodr.ciphers.classical.substitution import generate_key, encrypt, decrypt
+from pydecodr.ciphers.classical.substitution import generate_key, encrypt, decrypt
 key = generate_key()
 cipher = encrypt("HELLO", key)
 plain = decrypt(cipher, key)
@@ -176,14 +176,14 @@ plain = decrypt(cipher, key)
 CLI:
 
 ```
-python3 -m decodr.ciphers.fractionation.adfgx encrypt <text> <square_key> <trans_key> [pad]
-python3 -m decodr.ciphers.fractionation.adfgx decrypt <text> <square_key> <trans_key> [pad]
+python3 -m pydecodr.ciphers.fractionation.adfgx encrypt <text> <square_key> <trans_key> [pad]
+python3 -m pydecodr.ciphers.fractionation.adfgx decrypt <text> <square_key> <trans_key> [pad]
 ```
 
 Python:
 
 ```python
-from decodr.ciphers.fractionation.adfgx import encrypt, decrypt
+from pydecodr.ciphers.fractionation.adfgx import encrypt, decrypt
 cipher = encrypt("DEFEND THE CASTLE", "FORTIFICATION", "CIPHER", pad="X")
 plain = decrypt(cipher, "FORTIFICATION", "CIPHER", pad="X")
 ```
@@ -195,14 +195,14 @@ plain = decrypt(cipher, "FORTIFICATION", "CIPHER", pad="X")
 CLI:
 
 ```
-python3 -m decodr.ciphers.fractionation.bifid encrypt <text> [key] [period]
-python3 -m decodr.ciphers.fractionation.bifid decrypt <text> [key] [period]
+python3 -m pydecodr.ciphers.fractionation.bifid encrypt <text> [key] [period]
+python3 -m pydecodr.ciphers.fractionation.bifid decrypt <text> [key] [period]
 ```
 
 Python:
 
 ```python
-from decodr.ciphers.fractionation.bifid import encrypt, decrypt
+from pydecodr.ciphers.fractionation.bifid import encrypt, decrypt
 cipher = encrypt("HELLO", key="KEYWORD", period=5)
 plain = decrypt(cipher, key="KEYWORD", period=5)
 ```
@@ -216,14 +216,14 @@ plain = decrypt(cipher, key="KEYWORD", period=5)
 CLI:
 
 ```
-python3 -m decodr.ciphers.modern.aes encrypt <text> <key>
-python3 -m decodr.ciphers.modern.aes decrypt <base64_iv_plus_ct> <key>
+python3 -m pydecodr.ciphers.modern.aes encrypt <text> <key>
+python3 -m pydecodr.ciphers.modern.aes decrypt <base64_iv_plus_ct> <key>
 ```
 
 Python:
 
 ```python
-from decodr.ciphers.modern.aes import encrypt, decrypt
+from pydecodr.ciphers.modern.aes import encrypt, decrypt
 cipher = encrypt("HELLO WORLD", "mysecretkey123")
 plain = decrypt(cipher, "mysecretkey123")
 ```
@@ -235,14 +235,14 @@ plain = decrypt(cipher, "mysecretkey123")
 CLI:
 
 ```
-python3 -m decodr.ciphers.modern.hashes hash <text> [algo]
-python3 -m decodr.ciphers.modern.hashes verify <text> <digest>
+python3 -m pydecodr.ciphers.modern.hashes hash <text> [algo]
+python3 -m pydecodr.ciphers.modern.hashes verify <text> <digest>
 ```
 
 Python:
 
 ```python
-from decodr.ciphers.modern.hashes import hash_text, verify
+from pydecodr.ciphers.modern.hashes import hash_text, verify
 digest = hash_text("HELLO", algo="sha256")
 valid = verify("HELLO", digest)
 ```
@@ -254,15 +254,15 @@ valid = verify("HELLO", digest)
 CLI:
 
 ```
-python3 -m decodr.ciphers.modern.rsa gen <p> <q> [e]
-python3 -m decodr.ciphers.modern.rsa encrypt <text> <n> <e>
-python3 -m decodr.ciphers.modern.rsa decrypt <cipher> <n> <d>
+python3 -m pydecodr.ciphers.modern.rsa gen <p> <q> [e]
+python3 -m pydecodr.ciphers.modern.rsa encrypt <text> <n> <e>
+python3 -m pydecodr.ciphers.modern.rsa decrypt <cipher> <n> <d>
 ```
 
 Python:
 
 ```python
-from decodr.ciphers.modern.rsa import gen_keys, encrypt, decrypt
+from pydecodr.ciphers.modern.rsa import gen_keys, encrypt, decrypt
 n, e, d = gen_keys(61, 53)
 cipher = encrypt("HELLO", n, e)
 plain = decrypt(cipher, n, d)
@@ -277,14 +277,14 @@ plain = decrypt(cipher, n, d)
 CLI:
 
 ```
-python3 -m decodr.ciphers.polyalphabetic.autokey_vigenere encrypt <text> <key>
-python3 -m decodr.ciphers.polyalphabetic.autokey_vigenere decrypt <text> <key>
+python3 -m pydecodr.ciphers.polyalphabetic.autokey_vigenere encrypt <text> <key>
+python3 -m pydecodr.ciphers.polyalphabetic.autokey_vigenere decrypt <text> <key>
 ```
 
 Python:
 
 ```python
-from decodr.ciphers.polyalphabetic.autokey_vigenere import encrypt, decrypt
+from pydecodr.ciphers.polyalphabetic.autokey_vigenere import encrypt, decrypt
 cipher = encrypt("HELLO", "KEY")
 plain = decrypt(cipher, "KEY")
 ```
@@ -296,14 +296,14 @@ plain = decrypt(cipher, "KEY")
 CLI:
 
 ```
-python3 -m decodr.ciphers.polyalphabetic.beaufort encrypt <text> <key>
-python3 -m decodr.ciphers.polyalphabetic.beaufort decrypt <text> <key>
+python3 -m pydecodr.ciphers.polyalphabetic.beaufort encrypt <text> <key>
+python3 -m pydecodr.ciphers.polyalphabetic.beaufort decrypt <text> <key>
 ```
 
 Python:
 
 ```python
-from decodr.ciphers.polyalphabetic.beaufort import encrypt, decrypt
+from pydecodr.ciphers.polyalphabetic.beaufort import encrypt, decrypt
 cipher = encrypt("HELLO", "KEY")
 plain = decrypt(cipher, "KEY")
 ```
@@ -315,14 +315,14 @@ plain = decrypt(cipher, "KEY")
 CLI:
 
 ```
-python3 -m decodr.ciphers.polyalphabetic.playfair encrypt <text> <key>
-python3 -m decodr.ciphers.polyalphabetic.playfair decrypt <text> <key>
+python3 -m pydecodr.ciphers.polyalphabetic.playfair encrypt <text> <key>
+python3 -m pydecodr.ciphers.polyalphabetic.playfair decrypt <text> <key>
 ```
 
 Python:
 
 ```python
-from decodr.ciphers.polyalphabetic.playfair import encrypt, decrypt
+from pydecodr.ciphers.polyalphabetic.playfair import encrypt, decrypt
 cipher = encrypt("HELLO", "SECRET")
 plain = decrypt(cipher, "SECRET")
 ```
@@ -334,14 +334,14 @@ plain = decrypt(cipher, "SECRET")
 CLI:
 
 ```
-python3 -m decodr.ciphers.polyalphabetic.vigenere encrypt <text> <key>
-python3 -m decodr.ciphers.polyalphabetic.vigenere decrypt <text> <key>
+python3 -m pydecodr.ciphers.polyalphabetic.vigenere encrypt <text> <key>
+python3 -m pydecodr.ciphers.polyalphabetic.vigenere decrypt <text> <key>
 ```
 
 Python:
 
 ```python
-from decodr.ciphers.polyalphabetic.vigenere import encrypt, decrypt
+from pydecodr.ciphers.polyalphabetic.vigenere import encrypt, decrypt
 cipher = encrypt("HELLO", "KEY")
 plain = decrypt(cipher, "KEY")
 ```
@@ -355,14 +355,14 @@ plain = decrypt(cipher, "KEY")
 CLI:
 
 ```
-python3 -m decodr.ciphers.rotor.enigma encrypt <text>
-python3 -m decodr.ciphers.rotor.enigma decrypt <text>
+python3 -m pydecodr.ciphers.rotor.enigma encrypt <text>
+python3 -m pydecodr.ciphers.rotor.enigma decrypt <text>
 ```
 
 Python:
 
 ```python
-from decodr.ciphers.rotor.enigma import encrypt, decrypt
+from pydecodr.ciphers.rotor.enigma import encrypt, decrypt
 cipher = encrypt("HELLO")
 plain = decrypt(cipher)
 ```
@@ -376,14 +376,14 @@ plain = decrypt(cipher)
 CLI:
 
 ```
-python3 -m decodr.ciphers.stream.rc4 encrypt <text> <key> <encoding>
-python3 -m decodr.ciphers.stream.rc4 decrypt <hex> <key> <encoding>
+python3 -m pydecodr.ciphers.stream.rc4 encrypt <text> <key> <encoding>
+python3 -m pydecodr.ciphers.stream.rc4 decrypt <hex> <key> <encoding>
 ```
 
 Python:
 
 ```python
-from decodr.ciphers.stream.rc4 import encrypt, decrypt
+from pydecodr.ciphers.stream.rc4 import encrypt, decrypt
 cipher = encrypt("HELLO", "KEY", encoding="hex")
 plain = decrypt(cipher, "KEY", encoding="hex")
 ```
@@ -395,14 +395,14 @@ plain = decrypt(cipher, "KEY", encoding="hex")
 CLI:
 
 ```
-python3 -m decodr.ciphers.stream.repeating_xor encrypt <text> <key> <encoding>
-python3 -m decodr.ciphers.stream.repeating_xor decrypt <hex> <key> <encoding>
+python3 -m pydecodr.ciphers.stream.repeating_xor encrypt <text> <key> <encoding>
+python3 -m pydecodr.ciphers.stream.repeating_xor decrypt <hex> <key> <encoding>
 ```
 
 Python:
 
 ```python
-from decodr.ciphers.stream.repeating_xor import encrypt, decrypt
+from pydecodr.ciphers.stream.repeating_xor import encrypt, decrypt
 cipher = encrypt("HELLO", "KEY", "hex")
 plain = decrypt(cipher, "KEY", "hex")
 ```
@@ -414,14 +414,14 @@ plain = decrypt(cipher, "KEY", "hex")
 CLI:
 
 ```
-python3 -m decodr.ciphers.stream.xor encrypt <text> <key> <encoding>
-python3 -m decodr.ciphers.stream.xor decrypt <hex> <key> <encoding>
+python3 -m pydecodr.ciphers.stream.xor encrypt <text> <key> <encoding>
+python3 -m pydecodr.ciphers.stream.xor decrypt <hex> <key> <encoding>
 ```
 
 Python:
 
 ```python
-from decodr.ciphers.stream.xor import encrypt, decrypt
+from pydecodr.ciphers.stream.xor import encrypt, decrypt
 cipher = encrypt("HELLO", "KEY", "hex")
 plain = decrypt(cipher, "KEY", "hex")
 ```
@@ -435,14 +435,14 @@ plain = decrypt(cipher, "KEY", "hex")
 CLI:
 
 ```
-python3 -m decodr.ciphers.transposition.columnar encrypt <text> <key> [pad]
-python3 -m decodr.ciphers.transposition.columnar decrypt <text> <key> [pad]
+python3 -m pydecodr.ciphers.transposition.columnar encrypt <text> <key> [pad]
+python3 -m pydecodr.ciphers.transposition.columnar decrypt <text> <key> [pad]
 ```
 
 Python:
 
 ```python
-from decodr.ciphers.transposition.columnar import encrypt, decrypt
+from pydecodr.ciphers.transposition.columnar import encrypt, decrypt
 cipher = encrypt("HELLO WORLD", "KEY", pad="X")
 plain = decrypt(cipher, "KEY", pad="X")
 ```
@@ -454,14 +454,14 @@ plain = decrypt(cipher, "KEY", pad="X")
 CLI:
 
 ```
-python3 -m decodr.ciphers.transposition.railfence encrypt <text> [rails]
-python3 -m decodr.ciphers.transposition.railfence decrypt <text> [rails]
+python3 -m pydecodr.ciphers.transposition.railfence encrypt <text> [rails]
+python3 -m pydecodr.ciphers.transposition.railfence decrypt <text> [rails]
 ```
 
 Python:
 
 ```python
-from decodr.ciphers.transposition.railfence import encrypt, decrypt
+from pydecodr.ciphers.transposition.railfence import encrypt, decrypt
 cipher = encrypt("HELLO", rails=3)
 plain = decrypt(cipher, rails=3)
 ```
@@ -475,13 +475,13 @@ plain = decrypt(cipher, rails=3)
 CLI:
 
 ```
-python3 -m decodr.detectors.autodetect <string>
+python3 -m pydecodr.detectors.autodetect <string>
 ```
 
 Python:
 
 ```python
-from decodr.detectors.autodetect import detect
+from pydecodr.detectors.autodetect import detect
 result = detect("SOMECIPHERTEXT")
 ```
 
@@ -492,13 +492,13 @@ result = detect("SOMECIPHERTEXT")
 CLI:
 
 ```
-python3 -m decodr.detectors.file_magic <file>
+python3 -m pydecodr.detectors.file_magic <file>
 ```
 
 Python:
 
 ```python
-from decodr.detectors.file_magic import identify
+from pydecodr.detectors.file_magic import identify
 filetype = identify("mystery.bin")
 ```
 
@@ -511,13 +511,13 @@ filetype = identify("mystery.bin")
 CLI:
 
 ```
-python3 -m decodr.encodings.base32_mod <encode|decode> <text>
+python3 -m pydecodr.encodings.base32_mod <encode|decode> <text>
 ```
 
 Python:
 
 ```python
-from decodr.encodings.base32_mod import encode, decode
+from pydecodr.encodings.base32_mod import encode, decode
 encoded = encode("HELLO")
 decoded = decode(encoded)
 ```
@@ -527,13 +527,13 @@ decoded = decode(encoded)
 CLI:
 
 ```
-python3 -m decodr.encodings.base64_mod <encode|decode> <text>
+python3 -m pydecodr.encodings.base64_mod <encode|decode> <text>
 ```
 
 Python:
 
 ```python
-from decodr.encodings.base64_mod import encode, decode
+from pydecodr.encodings.base64_mod import encode, decode
 encoded = encode("HELLO")
 decoded = decode(encoded)
 ```
@@ -543,13 +543,13 @@ decoded = decode(encoded)
 CLI:
 
 ```
-python3 -m decodr.encodings.hex_mod <encode|decode> <text>
+python3 -m pydecodr.encodings.hex_mod <encode|decode> <text>
 ```
 
 Python:
 
 ```python
-from decodr.encodings.hex_mod import encode, decode
+from pydecodr.encodings.hex_mod import encode, decode
 encoded = encode("HELLO")
 decoded = decode(encoded)
 ```
@@ -559,13 +559,13 @@ decoded = decode(encoded)
 CLI:
 
 ```
-python3 -m decodr.encodings.url_mod <encode|decode> <text>
+python3 -m pydecodr.encodings.url_mod <encode|decode> <text>
 ```
 
 Python:
 
 ```python
-from decodr.encodings.url_mod import encode, decode
+from pydecodr.encodings.url_mod import encode, decode
 encoded = encode("HELLO WORLD")
 decoded = decode(encoded)
 ```
