@@ -3,39 +3,55 @@ title: 'pydecodr'
 pubDate: '2025-10-31'
 ---
 
-# pydecodr
-> A modular CTF/crypto library toolkit for encodings, classic ciphers, and autodetection. CLI included :3.
+[pydecodr](https://github.com/xndadelin/pydecodr) is a modular CTF/crypto toolkit i built for encodings, classic ciphers, and autodetection. it has a python API and a CLI. you can install it with `pip install pydecodr`.
 
-
-`pydecodr` is a Python package that lets you **encode, decode, encrypt or decrypt text** using classical, polyalphabetic, modern, and stream ciphers, all through a **Python API** and a **CLI interface**
-
----
-## Features:
-- classical ciphers: (caesar, atbash, affine, rot13, substitution)
-- polyalphabetic: (vigenere, autokey_vigenere, beaufort, playfair)
-- fractionation: (bifid, ADFGX)
-- transpos9ition: (railfence, columnar)
-- stream: (xor, repeating xor, rc4)
-- modern: (aes, rsa, hash utilities)
-- encodings: (b32, b64, hex, URL-safe)
-- detection & utils: (file magic detection, I/O helpers)
-- cli interface
+i made this project during [moonshot](https://moonshot.hackclub.com/), a 4-day hackathon in florida visiting kennedy space center and universal studios!
 
 ---
 
-## Installation
-```bash
-pip install pydecodr
-```
+## what it does
 
---- 
+it lets you **encode, decode, encrypt, and decrypt** text using a bunch of cipher families — all from python or the terminal:
 
-## Usage
-### CLI interface
-You can use any cipher module directly with Python's `-m` flag:
+- **classical** — caesar, atbash, affine, rot13, substitution, hill, polybius, four-square, bacon
+- **polyalphabetic** — vigenère, autokey vigenère, beaufort, playfair, gronsfeld
+- **fractionation** — bifid, trifid, ADFGX, ADFGVX
+- **transposition** — railfence, columnar, double transposition, myszkowski, route
+- **stream** — xor, repeating xor, RC4
+- **rotor** — enigma
+- **modern** — AES, RSA, hash utilities
+- **encodings** — base32, base64, base85, hex, URL-safe, morse
+- **detection** — autodetect cipher type, file magic identification
+
+---
+
+## quick start
+
+### python API
 
 ```python
-# caesar cipher
+from pydecodr.ciphers.classical import caesar
+from pydecodr.ciphers.polyalphabetic import vigenere
+
+caesar.encrypt("HELLO", 3)       # -> KHOOR
+vigenere.encrypt("HELLO", "KEY") # -> RIJVS
+```
+
+you can also load any module dynamically through the global registry:
+
+```python
+from pydecodr import load_module
+
+mod = load_module("adfgx")
+ct = mod.encrypt("DEFEND THE EAST WALL", "FORTIFICATION", "CIPHER")
+mod.decrypt(ct, "FORTIFICATION", "CIPHER")
+```
+
+### CLI
+
+every module works with `python3 -m`:
+
+```bash
 python3 -m pydecodr.ciphers.classical.caesar encrypt "HELLO" 3
 # -> KHOOR
 
@@ -43,573 +59,241 @@ python3 -m pydecodr.ciphers.classical.caesar decrypt "KHOOR" 3
 # -> HELLO
 ```
 
-### Python API
-```python
-from pydecodr.ciphers.classical import caesar
-from pydecodr.ciphers.polyalphabetic import vigenere
-
-print(caesar.encrypt("HELLO", 3))
-# KHOOR
-
-print(vigenere.encrypt("HELLOWORLD", "KEY"))
-# RIJVSUYVJN
-```
-Or load dynamically using the global registry:
-```python
-from pydecodr import load_module
-
-mod = load_module("adfgx")
-ciphertext = mod.encrypt("DEFEND THE EAST WALL", "FORTIFICATION", "CIPHER")
-print(mod.decrypt(ciphertext, "FORTIFICATION", "CIPHER"))
-```
-# pydecodr CLI & code usage reference
-
-This document shows how to use each cipher and module from the command line and from Python code.
-
 ---
 
-## classical ciphers
+## cipher reference
 
-### affine
+below is every supported cipher with its CLI usage and python API. the pattern is always the same — `encrypt`/`decrypt` (or `encode`/`decode` for encodings).
 
-CLI:
+### classical ciphers
 
-```
-python3 -m pydecodr.ciphers.classical.affine encrypt <text> [a] [b]
-python3 -m pydecodr.ciphers.classical.affine decrypt <text> [a] [b]
-python3 -m pydecodr.ciphers.classical.affine crack <ciphertext>
-```
-
-Python:
-
-```python
-from pydecodr.ciphers.classical.affine import encrypt, decrypt, crack
-cipher = encrypt("HELLO", a=5, b=8)
-plain = decrypt(cipher, a=5, b=8)
-guesses = crack(cipher)
-```
-
----
-
-### atbash
-
-CLI:
-
-```
-python3 -m pydecodr.ciphers.classical.atbash <encode|decode> <text>
-```
-
-Python:
-
-```python
-from pydecodr.ciphers.classical.atbash import encode, decode
-cipher = encode("HELLO")
-plain = decode(cipher)
-```
-
----
-
-### caesar
-
-CLI:
-
-```
-python3 -m pydecodr.ciphers.classical.caesar encrypt <text> [shift]
-python3 -m pydecodr.ciphers.classical.caesar decrypt <text> [shift]
-python3 -m pydecodr.ciphers.classical.caesar crack <text>
-```
-
-Python:
+**caesar** — shift cipher with optional brute-force cracking
 
 ```python
 from pydecodr.ciphers.classical.caesar import encrypt, decrypt, crack
-cipher = encrypt("HELLO", shift=3)
-plain = decrypt(cipher, shift=3)
-possible = crack(cipher)
+encrypt("HELLO", shift=3)  # KHOOR
+decrypt("KHOOR", shift=3)  # HELLO
+crack("KHOOR")             # tries all 26 shifts
+```
+```bash
+python3 -m pydecodr.ciphers.classical.caesar encrypt "HELLO" 3
+python3 -m pydecodr.ciphers.classical.caesar crack "KHOOR"
 ```
 
----
+**affine** — multiplicative + additive cipher with cracking support
 
-### rot13
-
-CLI:
-
+```python
+from pydecodr.ciphers.classical.affine import encrypt, decrypt, crack
+encrypt("HELLO", a=5, b=8)
+decrypt(cipher, a=5, b=8)
+crack(cipher)
 ```
-python3 -m pydecodr.ciphers.classical.rot13 <encode|decode> <text>
+```bash
+python3 -m pydecodr.ciphers.classical.affine encrypt "HELLO" 5 8
+python3 -m pydecodr.ciphers.classical.affine crack "RCLLA"
 ```
 
-Python:
+**atbash** — mirror alphabet substitution
+
+```python
+from pydecodr.ciphers.classical.atbash import encode, decode
+encode("HELLO")  # SVOOL
+```
+
+**rot13** — special case of caesar with shift=13
 
 ```python
 from pydecodr.ciphers.classical.rot13 import encode, decode
-cipher = encode("HELLO")
-plain = decode(cipher)
+encode("HELLO")  # URYYB
 ```
 
----
-
-### substitution
-
-CLI:
-
-```
-python3 -m pydecodr.ciphers.classical.substitution generate-key
-python3 -m pydecodr.ciphers.classical.substitution encrypt <text> <key>
-python3 -m pydecodr.ciphers.classical.substitution decrypt <text> <key>
-```
-
-Python:
+**substitution** — random key monoalphabetic substitution
 
 ```python
 from pydecodr.ciphers.classical.substitution import generate_key, encrypt, decrypt
 key = generate_key()
-cipher = encrypt("HELLO", key)
-plain = decrypt(cipher, key)
+encrypt("HELLO", key)
 ```
 
 ---
 
-## fractionation ciphers
+### polyalphabetic ciphers
 
-### adfgx
-
-CLI:
-
-```
-python3 -m pydecodr.ciphers.fractionation.adfgx encrypt <text> <square_key> <trans_key> [pad]
-python3 -m pydecodr.ciphers.fractionation.adfgx decrypt <text> <square_key> <trans_key> [pad]
-```
-
-Python:
+**vigenère** — repeating-key polyalphabetic cipher
 
 ```python
-from pydecodr.ciphers.fractionation.adfgx import encrypt, decrypt
-cipher = encrypt("DEFEND THE CASTLE", "FORTIFICATION", "CIPHER", pad="X")
-plain = decrypt(cipher, "FORTIFICATION", "CIPHER", pad="X")
+from pydecodr.ciphers.polyalphabetic.vigenere import encrypt, decrypt
+encrypt("HELLO", "KEY")
+```
+
+**autokey vigenère** — vigenère variant where the plaintext extends the key
+
+```python
+from pydecodr.ciphers.polyalphabetic.autokey_vigenere import encrypt, decrypt
+encrypt("HELLO", "KEY")
+```
+
+**beaufort** — reciprocal cipher (encrypt = decrypt)
+
+```python
+from pydecodr.ciphers.polyalphabetic.beaufort import encrypt, decrypt
+encrypt("HELLO", "KEY")
+```
+
+**playfair** — digraph substitution cipher using a 5×5 matrix
+
+```python
+from pydecodr.ciphers.polyalphabetic.playfair import encrypt, decrypt
+encrypt("HELLO", "SECRET")
 ```
 
 ---
 
-### bifid
+### fractionation ciphers
 
-CLI:
-
-```
-python3 -m pydecodr.ciphers.fractionation.bifid encrypt <text> [key] [period]
-python3 -m pydecodr.ciphers.fractionation.bifid decrypt <text> [key] [period]
-```
-
-Python:
+**bifid** — combines polybius square with transposition
 
 ```python
 from pydecodr.ciphers.fractionation.bifid import encrypt, decrypt
-cipher = encrypt("HELLO", key="KEYWORD", period=5)
-plain = decrypt(cipher, key="KEYWORD", period=5)
+encrypt("HELLO", key="KEYWORD", period=5)
+```
+
+**ADFGX** — WWI german cipher combining substitution and columnar transposition
+
+```python
+from pydecodr.ciphers.fractionation.adfgx import encrypt, decrypt
+encrypt("DEFEND THE CASTLE", "FORTIFICATION", "CIPHER", pad="X")
 ```
 
 ---
 
-## modern ciphers
+### transposition ciphers
 
-### aes
+**railfence** — zigzag transposition
 
-CLI:
-
-```
-python3 -m pydecodr.ciphers.modern.aes encrypt <text> <key>
-python3 -m pydecodr.ciphers.modern.aes decrypt <base64_iv_plus_ct> <key>
+```python
+from pydecodr.ciphers.transposition.railfence import encrypt, decrypt
+encrypt("HELLO WORLD", rails=3)
 ```
 
-Python:
+**columnar** — key-ordered column transposition
+
+```python
+from pydecodr.ciphers.transposition.columnar import encrypt, decrypt
+encrypt("HELLO WORLD", "KEY", pad="X")
+```
+
+---
+
+### stream ciphers
+
+**xor / repeating xor** — byte-level XOR encryption
+
+```python
+from pydecodr.ciphers.stream.xor import encrypt, decrypt
+encrypt("HELLO", "KEY", "hex")
+```
+
+**RC4** — stream cipher with key scheduling
+
+```python
+from pydecodr.ciphers.stream.rc4 import encrypt, decrypt
+encrypt("HELLO", "KEY", encoding="hex")
+```
+
+---
+
+### rotor cipher
+
+**enigma** — simplified enigma machine simulation
+
+```python
+from pydecodr.ciphers.rotor.enigma import encrypt, decrypt
+encrypt("HELLO")
+```
+
+---
+
+### modern ciphers
+
+**AES** — symmetric encryption (CBC mode, auto IV)
 
 ```python
 from pydecodr.ciphers.modern.aes import encrypt, decrypt
-cipher = encrypt("HELLO WORLD", "mysecretkey123")
-plain = decrypt(cipher, "mysecretkey123")
+ct = encrypt("HELLO WORLD", "mysecretkey123")
+decrypt(ct, "mysecretkey123")
 ```
 
----
-
-### hashes
-
-CLI:
-
-```
-python3 -m pydecodr.ciphers.modern.hashes hash <text> [algo]
-python3 -m pydecodr.ciphers.modern.hashes verify <text> <digest>
-```
-
-Python:
-
-```python
-from pydecodr.ciphers.modern.hashes import hash_text, verify
-digest = hash_text("HELLO", algo="sha256")
-valid = verify("HELLO", digest)
-```
-
----
-
-### rsa
-
-CLI:
-
-```
-python3 -m pydecodr.ciphers.modern.rsa gen <p> <q> [e]
-python3 -m pydecodr.ciphers.modern.rsa encrypt <text> <n> <e>
-python3 -m pydecodr.ciphers.modern.rsa decrypt <cipher> <n> <d>
-```
-
-Python:
+**RSA** — asymmetric encryption with key generation
 
 ```python
 from pydecodr.ciphers.modern.rsa import gen_keys, encrypt, decrypt
 n, e, d = gen_keys(61, 53)
-cipher = encrypt("HELLO", n, e)
-plain = decrypt(cipher, n, d)
+ct = encrypt("HELLO", n, e)
+decrypt(ct, n, d)
+```
+
+**hashes** — hashing and verification
+
+```python
+from pydecodr.ciphers.modern.hashes import hash_text, verify
+digest = hash_text("HELLO", algo="sha256")
+verify("HELLO", digest)  # True
 ```
 
 ---
 
-## polyalphabetic ciphers
+### encodings
 
-### autokey vigenere
-
-CLI:
-
-```
-python3 -m pydecodr.ciphers.polyalphabetic.autokey_vigenere encrypt <text> <key>
-python3 -m pydecodr.ciphers.polyalphabetic.autokey_vigenere decrypt <text> <key>
-```
-
-Python:
-
-```python
-from pydecodr.ciphers.polyalphabetic.autokey_vigenere import encrypt, decrypt
-cipher = encrypt("HELLO", "KEY")
-plain = decrypt(cipher, "KEY")
-```
-
----
-
-### beaufort
-
-CLI:
-
-```
-python3 -m pydecodr.ciphers.polyalphabetic.beaufort encrypt <text> <key>
-python3 -m pydecodr.ciphers.polyalphabetic.beaufort decrypt <text> <key>
-```
-
-Python:
-
-```python
-from pydecodr.ciphers.polyalphabetic.beaufort import encrypt, decrypt
-cipher = encrypt("HELLO", "KEY")
-plain = decrypt(cipher, "KEY")
-```
-
----
-
-### playfair
-
-CLI:
-
-```
-python3 -m pydecodr.ciphers.polyalphabetic.playfair encrypt <text> <key>
-python3 -m pydecodr.ciphers.polyalphabetic.playfair decrypt <text> <key>
-```
-
-Python:
-
-```python
-from pydecodr.ciphers.polyalphabetic.playfair import encrypt, decrypt
-cipher = encrypt("HELLO", "SECRET")
-plain = decrypt(cipher, "SECRET")
-```
-
----
-
-### vigenere
-
-CLI:
-
-```
-python3 -m pydecodr.ciphers.polyalphabetic.vigenere encrypt <text> <key>
-python3 -m pydecodr.ciphers.polyalphabetic.vigenere decrypt <text> <key>
-```
-
-Python:
-
-```python
-from pydecodr.ciphers.polyalphabetic.vigenere import encrypt, decrypt
-cipher = encrypt("HELLO", "KEY")
-plain = decrypt(cipher, "KEY")
-```
-
----
-
-## rotor cipher
-
-### enigma
-
-CLI:
-
-```
-python3 -m pydecodr.ciphers.rotor.enigma encrypt <text>
-python3 -m pydecodr.ciphers.rotor.enigma decrypt <text>
-```
-
-Python:
-
-```python
-from pydecodr.ciphers.rotor.enigma import encrypt, decrypt
-cipher = encrypt("HELLO")
-plain = decrypt(cipher)
-```
-
----
-
-## stream ciphers
-
-### rc4
-
-CLI:
-
-```
-python3 -m pydecodr.ciphers.stream.rc4 encrypt <text> <key> <encoding>
-python3 -m pydecodr.ciphers.stream.rc4 decrypt <hex> <key> <encoding>
-```
-
-Python:
-
-```python
-from pydecodr.ciphers.stream.rc4 import encrypt, decrypt
-cipher = encrypt("HELLO", "KEY", encoding="hex")
-plain = decrypt(cipher, "KEY", encoding="hex")
-```
-
----
-
-### repeating xor
-
-CLI:
-
-```
-python3 -m pydecodr.ciphers.stream.repeating_xor encrypt <text> <key> <encoding>
-python3 -m pydecodr.ciphers.stream.repeating_xor decrypt <hex> <key> <encoding>
-```
-
-Python:
-
-```python
-from pydecodr.ciphers.stream.repeating_xor import encrypt, decrypt
-cipher = encrypt("HELLO", "KEY", "hex")
-plain = decrypt(cipher, "KEY", "hex")
-```
-
----
-
-### xor
-
-CLI:
-
-```
-python3 -m pydecodr.ciphers.stream.xor encrypt <text> <key> <encoding>
-python3 -m pydecodr.ciphers.stream.xor decrypt <hex> <key> <encoding>
-```
-
-Python:
-
-```python
-from pydecodr.ciphers.stream.xor import encrypt, decrypt
-cipher = encrypt("HELLO", "KEY", "hex")
-plain = decrypt(cipher, "KEY", "hex")
-```
-
----
-
-## transposition ciphers
-
-### columnar
-
-CLI:
-
-```
-python3 -m pydecodr.ciphers.transposition.columnar encrypt <text> <key> [pad]
-python3 -m pydecodr.ciphers.transposition.columnar decrypt <text> <key> [pad]
-```
-
-Python:
-
-```python
-from pydecodr.ciphers.transposition.columnar import encrypt, decrypt
-cipher = encrypt("HELLO WORLD", "KEY", pad="X")
-plain = decrypt(cipher, "KEY", pad="X")
-```
-
----
-
-### railfence
-
-CLI:
-
-```
-python3 -m pydecodr.ciphers.transposition.railfence encrypt <text> [rails]
-python3 -m pydecodr.ciphers.transposition.railfence decrypt <text> [rails]
-```
-
-Python:
-
-```python
-from pydecodr.ciphers.transposition.railfence import encrypt, decrypt
-cipher = encrypt("HELLO", rails=3)
-plain = decrypt(cipher, rails=3)
-```
-
----
-
-## detectors
-
-### autodetect
-
-CLI:
-
-```
-python3 -m pydecodr.detectors.autodetect <string>
-```
-
-Python:
-
-```python
-from pydecodr.detectors.autodetect import detect
-result = detect("SOMECIPHERTEXT")
-```
-
----
-
-### file magic
-
-CLI:
-
-```
-python3 -m pydecodr.detectors.file_magic <file>
-```
-
-Python:
-
-```python
-from pydecodr.detectors.file_magic import identify
-filetype = identify("mystery.bin")
-```
-
----
-
-## encodings
-
-### base32
-
-CLI:
-
-```
-python3 -m pydecodr.encodings.base32_mod <encode|decode> <text>
-```
-
-Python:
-
-```python
-from pydecodr.encodings.base32_mod import encode, decode
-encoded = encode("HELLO")
-decoded = decode(encoded)
-```
-
-### base64
-
-CLI:
-
-```
-python3 -m pydecodr.encodings.base64_mod <encode|decode> <text>
-```
-
-Python:
+all encodings follow the same `encode`/`decode` pattern:
 
 ```python
 from pydecodr.encodings.base64_mod import encode, decode
-encoded = encode("HELLO")
-decoded = decode(encoded)
+encode("HELLO")  # SEVMTE8=
+decode("SEVMTE8=")  # HELLO
 ```
 
-### hex
+available: `base32_mod`, `base64_mod`, `hex_mod`, `url_mod`
 
-CLI:
-
-```
-python3 -m pydecodr.encodings.hex_mod <encode|decode> <text>
-```
-
-Python:
-
-```python
-from pydecodr.encodings.hex_mod import encode, decode
-encoded = encode("HELLO")
-decoded = decode(encoded)
-```
-
-### url
-
-CLI:
-
-```
-python3 -m pydecodr.encodings.url_mod <encode|decode> <text>
-```
-
-Python:
-
-```python
-from pydecodr.encodings.url_mod import encode, decode
-encoded = encode("HELLO WORLD")
-decoded = decode(encoded)
+```bash
+python3 -m pydecodr.encodings.base64_mod encode "HELLO"
+python3 -m pydecodr.encodings.hex_mod decode "48454c4c4f"
 ```
 
 ---
 
-## module map
+### detectors
+
+**autodetect** — tries to identify what cipher was used
 
 ```python
-ENCODING_MAP = {
-    "base64": "pydecodr.encodings.base64_mod",
-    "base32": "pydecodr.encodings.base32_mod",
-    "hex": "pydecodr.encodings.hex_mod",
-    "url": "pydecodr.encodings.url_mod",
-
-    "caesar": "pydecodr.ciphers.classical.caesar",
-    "atbash": "pydecodr.ciphers.classical.atbash",
-    "affine": "pydecodr.ciphers.classical.affine",
-    "rot13": "pydecodr.ciphers.classical.rot13",
-    "substitution": "pydecodr.ciphers.classical.substitution",
-
-    "vigenere": "pydecodr.ciphers.polyalphabetic.vigenere",
-    "autokey_vigenere": "pydecodr.ciphers.polyalphabetic.autokey_vigenere",
-    "beaufort": "pydecodr.ciphers.polyalphabetic.beaufort",
-    "playfair": "pydecodr.ciphers.polyalphabetic.playfair",
-
-    "bifid": "pydecodr.ciphers.fractionation.bifid",
-    "adfgx": "pydecodr.ciphers.fractionation.adfgx",
-
-    "railfence": "pydecodr.ciphers.transposition.railfence",
-    "columnar": "pydecodr.ciphers.transposition.columnar",
-
-    "xor": "pydecodr.ciphers.stream.xor",
-    "repeating_xor": "pydecodr.ciphers.stream.repeating_xor",
-    "rc4": "pydecodr.ciphers.stream.rc4",
-
-    "enigma": "pydecodr.ciphers.rotor.enigma",
-
-    "aes": "pydecodr.ciphers.modern.aes",
-    "rsa": "pydecodr.ciphers.modern.rsa",
-    "hashes": "pydecodr.ciphers.modern.hashes",
-
-    "fmt": "pydecodr.utils.fmt",
-    "ioutils": "pydecodr.utils.ioutils"
-}
+from pydecodr.detectors.autodetect import detect
+detect("SOMECIPHERTEXT")
 ```
+
+**file magic** — identifies file types by their magic bytes
+
+```python
+from pydecodr.detectors.file_magic import identify
+identify("mystery.bin")
+```
+
+---
+
+## dynamic module loading
+
+pydecodr has a global registry that maps short names to module paths, so you can load anything dynamically:
+
+```python
+from pydecodr import load_module
+
+caesar = load_module("caesar")
+caesar.encrypt("HELLO", 3)
+```
+
+this is useful for building tools on top of pydecodr where the cipher is selected at runtime — like in CTF solvers or automated pipelines.
+
+---
+
+check out the [source code](https://github.com/xndadelin/pydecodr) or install it with `pip install pydecodr` and play around!
 
